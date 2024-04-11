@@ -11,19 +11,19 @@ export default function Home() {
         width={300}
         height={300}
       />
-      <Link href="/data_analysis">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Go to Data Analysis
-        </button>
-      </Link>
       <Link href="/data_display">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Go to Data Display
         </button>
       </Link>
+      <Link href="/data_analysis">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Go to Bar Chart Data
+        </button>
+      </Link>
       <Link href="/data_analysis_2">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Go to Data Analysis 2
+          Go to Line Chart Data
         </button>
       </Link>
     </main>

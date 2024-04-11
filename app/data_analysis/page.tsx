@@ -1,68 +1,61 @@
-"use client"
-import { Chart } from '@antv/g2';
-import { useEffect, useRef } from 'react';
+"use client";
+import React from 'react';
+import Bar from '../components/bar/page';
+import { getDatabase, ref, get } from "firebase/database";
+import { app } from "../api/firebaseapi/firebaseconfig";
+import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation'
 
-export default function G2Demo() {
-  const container = useRef(null);
-  const chart = useRef(null);
+const DataAnalysis = () => {
+  const [data, setData] = useState({});
+  const router = useRouter();
 
   useEffect(() => {
-    
-
-    // 准备数据
-    const data = [
-      { genre: 'Sports', sold: 275 },
-      { genre: 'Strategy', sold: 115 },
-      { genre: 'Action', sold: 120 },
-      { genre: 'Shooter', sold: 350 },
-      { genre: 'Other', sold: 150 },
-    ];
-    if (!chart.current) {
-      chart.current = renderBarChart(container.current, data);
-    }
+    // get data from firebase
+    getData().then((data) => {
+      let show_data = [];
+      for (let key in data) {
+        let point = data[key];
+        for (let key2 in point) {
+          let row = point[key2];
+          show_data.push(row);
+        }
+      }
+      // console.log(show_data);
+      setData(show_data);
+    });
   }, []);
-  
 
-  function renderBarChart(container, data) {
-    const chart = new Chart({
-      container,
-      });
-  
-    // 声明可视化
-    chart
-      .interval() // 创建一个 Interval 标记
-      .data(data) // 绑定数据
-      .encode('x', 'genre') // 编码 x 通道
-      .encode('y', 'sold') // 编码 y 通道
-      .encode('key', 'genre') // 指定 key
-      .animate('update', { duration: 300 }); // 指定更新动画的时间
-  
-    // 渲染可视化
-    chart.render();
-  
-    return chart;
+  async function getData() {
+    const db = getDatabase(app);
+    const dbRef = ref(db, "data");
+    const snapshot = await get(dbRef);
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log("No data available");
+    }
   }
 
-  function updateBarChart(chart) {
-    // 获得 Interval Mark
-    const interval = chart.getNodesByType('interval')[0];
-
-    // 模拟并且更新 Interval 的数据
-    const newData = interval.data().map((d) => ({
-      ...d,
-      sold: Math.random() * 400 + 100,
-    }));
-
-    interval.data(newData);
-
-    // 重新渲染
-    chart.render();
-  }
 
   return (
-    <div className="App">
-      <div ref={container}></div>
-      <button onClick={() => updateBarChart(chart.current)}>Update Data</button>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <h1 className="text-4xl font-bold">Data Analysis</h1>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', padding: '20px' }}>
+      {Object.keys(data).length > 0
+        ? <>
+            <Bar data={data} x='Time' y='Temp' />
+            <Bar data={data} x='Time' y='Temp' />
+            <Bar data={data} x='Time' y='Temp' />
+            <Bar data={data} x='Time' y='Temp' />
+          </>
+        : <p style={{ gridColumn: '1 / -1' }}>Loading...</p>}
     </div>
+    <button type="button" onClick={() => router.back()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Go back
+    </button>
+    </main>
   );
-}
+};
+
+export default DataAnalysis;
