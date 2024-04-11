@@ -45,9 +45,9 @@ const DataAnalysis = () => {
       {Object.keys(data).length > 0
         ? <>
             <Line data={data} x='Time' y='Temp' />
+            <Line data={data} x='Time' y='Humid' />
             <Line data={data} x='Time' y='Temp' />
-            <Line data={data} x='Time' y='Temp' />
-            <Line data={data} x='Time' y='Temp' />
+            <Line data={data} x='Time' y='Humid' />
           </>
         : <p style={{ gridColumn: '1 / -1' }}>Loading...</p>}
     </div>
