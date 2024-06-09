@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, get } from "firebase/database";
 import { app } from "../api/firebaseapi/firebaseconfig";
-import Chart from 'react-apexcharts';
+import ApexChart from 'react-apexcharts';
 
-const DataAnalysis = () => {
+const DataChart = () => {
   const [data, setData] = useState([]);
   const [currentDataset, setCurrentDataset] = useState('ms1');
 
@@ -106,9 +106,9 @@ const DataAnalysis = () => {
       <div className="flex flex-col flex-1 w-full space-y-4">
         {data.length > 0 ? (
           <>
-            <Chart options={getOptions('CPU Temperature')} series={[{ name: 'CPU Temperature', data: data.map(item => ({ x: new Date(item.sys_time), y: item.cpu_temp })) }]} type="line" height="300px" />
-            <Chart options={getOptions('Environment Humidity')} series={[{ name: 'Environment Humidity', data: data.map(item => ({ x: new Date(item.sys_time), y: item.env_humidity })) }]} type="line" height="300px" />
-            <Chart options={getOptions('Environment Temperature')} series={[{ name: 'Environment Temperature', data: data.map(item => ({ x: new Date(item.sys_time), y: item.env_temperature })) }]} type="line" height="300px" />
+            <ApexChart options={getOptions('CPU Temperature')} series={[{ name: 'CPU Temperature', data: data.map(item => ({ x: new Date(item.sys_time), y: item.cpu_temp })) }]} type="line" height="300px" />
+            <ApexChart options={getOptions('Environment Humidity')} series={[{ name: 'Environment Humidity', data: data.map(item => ({ x: new Date(item.sys_time), y: item.env_humidity })) }]} type="line" height="300px" />
+            <ApexChart options={getOptions('Environment Temperature')} series={[{ name: 'Environment Temperature', data: data.map(item => ({ x: new Date(item.sys_time), y: item.env_temperature })) }]} type="line" height="300px" />
           </>
         ) : (
           <p className="text-center w-full">Loading...</p>
@@ -118,4 +118,4 @@ const DataAnalysis = () => {
   );
 };
 
-export default DataAnalysis;
+export default DataChart;

@@ -62,7 +62,7 @@ export default function SideBar() {
               Chart
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               href="/reports"
               className={`block rounded-lg px-4 py-2 text-sm font-medium transition duration-200 transform ${
@@ -85,7 +85,7 @@ export default function SideBar() {
             >
               Settings
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
     </div>

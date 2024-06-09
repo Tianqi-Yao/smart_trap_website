@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import Button1 from "@/app/components/button/button1";
-
 export default function Dashboard() {
     return (
         <div className="min-h-screen flex flex-col gap-8">
