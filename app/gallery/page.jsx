@@ -7,8 +7,8 @@ import Button1 from "../components/button/button1";
 
 function Gallery() {
   const [currentFolder, setCurrentFolder] = useState('ms1'); // Default folder
-  const [imageData, setImageData] = useState<{ url: string; name: string }[]>([]); 
-  const [error, setError] = useState<string>(""); 
+  const [imageData, setImageData] = useState([]); 
+  const [error, setError] = useState(""); 
   const [showImages, setShowImages] = useState(true); // State to toggle between showing images or links
   const router = useRouter();
 
@@ -29,8 +29,8 @@ function Gallery() {
         return Promise.all(promises); 
       })
       .then(results => {
-        const validData = results.filter(item => item !== null); // Filter out null values
-        setImageData(validData as { url: string; name: string }[]);
+        const validData = results.filter(item => item !== null); 
+        setImageData(validData);
       })
       .catch((error) => {
         console.error("Error listing images:", error);
