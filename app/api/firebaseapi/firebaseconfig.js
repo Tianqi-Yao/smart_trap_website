@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBnKRUMpXZqfyruNL8cwSF1mHWKTP7ellk",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "smarttrapproject-40340.firebaseapp.com",
     databaseURL: "https://smarttrapproject-40340-default-rtdb.firebaseio.com",
     projectId: "smarttrapproject-40340",
