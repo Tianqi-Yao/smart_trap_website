@@ -5,7 +5,7 @@ import { app } from "../api/firebaseapi/firebaseconfig";
 import Chart from 'react-apexcharts';
 
 const DataAnalysis = () => {
-  const [data, setData] = useState<{ sys_time: Date; cpu_temp: any; env_humidity: any; env_temperature: any; }[]>([]);
+  const [data, setData] = useState([]);
   const [currentDataset, setCurrentDataset] = useState('ms1');
 
   useEffect(() => {
@@ -16,14 +16,14 @@ const DataAnalysis = () => {
     });
   }, [currentDataset]);
 
-  async function getData(dataset: string) {
+  async function getData(dataset) {
     const db = getDatabase(app);
     const dbRef = ref(db, `/${dataset}/data`);
     const snapshot = await get(dbRef);
     return snapshot.exists() ? snapshot.val() : null;
   }
 
-  function formatDataForChart(rawData: { cpu_temp: any; env_humidity: any; env_temperature: any; sys_time: any; }) {
+  function formatDataForChart(rawData) {
     const { cpu_temp, env_humidity, env_temperature, sys_time } = rawData;
     // 上面数据(cpu_temp, env_humidity, env_temperature, sys_time)有-999则是缺失数据，需要处理为null
 
@@ -57,7 +57,7 @@ const DataAnalysis = () => {
     return formattedData;
   }
 
-  function getOptions(title: string) {
+  function getOptions(title) {
     return {
       chart: { type: 'line', height: '100%', zoom: { enabled: true } },
       stroke: { curve: 'smooth' },
