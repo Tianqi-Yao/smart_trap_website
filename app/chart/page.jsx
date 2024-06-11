@@ -69,6 +69,8 @@ const DataChart = () => {
         <option value="ms2">MS2</option>
         <option value="south1">South1</option>
         <option value="south2">South2</option>
+        <option value="lloyd">lloyd</option>
+        <option value="jeff">jeff</option>
       </select>
       <ResponsiveContainer width="95%" height={300}>
         <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>

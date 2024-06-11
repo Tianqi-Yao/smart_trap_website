@@ -10,7 +10,6 @@ function Gallery() {
   const [imageData, setImageData] = useState([]); 
   const [error, setError] = useState(""); 
   const [showImages, setShowImages] = useState(true); // State to toggle between showing images or links
-  const router = useRouter();
 
   useEffect(() => {
     const storage = getStorage(app, "gs://smarttrapproject-40340.appspot.com");
@@ -54,6 +53,8 @@ function Gallery() {
       <button onClick={() => handleFolderChange('ms2')}><Button1 text="ms2" /></button>
       <button onClick={() => handleFolderChange('south1')}><Button1 text="south1" /></button>
       <button onClick={() => handleFolderChange('south2')}><Button1 text="south2" /></button>
+      <button onClick={() => handleFolderChange('lloyd')}><Button1 text="lloyd" /></button>
+      <button onClick={() => handleFolderChange('jeff')}><Button1 text="jeff" /></button>
       {imageData.length > 0 && (
         <div>
           <h2 className="text-2xl font-bold">Content from {currentFolder}:</h2>
