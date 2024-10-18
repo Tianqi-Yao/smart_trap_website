@@ -27,7 +27,7 @@ export default function RootLayout({
           <div className="ml-32 md:ml-48 flex-1">
             <Header />
             {/* full screen same bg color */}
-            <main className="min-h-screen p-4 bg-gray-100">
+            <main className="min-h-screen p-4 bg-gray-100" style={{ backgroundImage: "url('/images/berry.png')", backgroundRepeat: "repeat-y", backgroundSize: "100% auto" }}>
               {children}
             </main>
             <Footer />

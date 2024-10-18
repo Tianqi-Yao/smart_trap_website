@@ -4,16 +4,22 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { getDatabase, ref, get } from "firebase/database";
 import { app } from "../api/firebaseapi/firebaseconfig";
 
+const farms = ['ms2', 'ms1', 'south1', 'south2', 'lloyd', 'jeff', 'southfarm1', 'airport1', 'airport3'];
+
 const DataChart = () => {
   const [data, setData] = useState([]);
-  const [currentDataset, setCurrentDataset] = useState("ms1");
+  const [loading, setLoading] = useState(false);
+  const [currentDataset, setCurrentDataset] = useState("ms2");
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(`Fetching data for ${currentDataset}...`);
+      setLoading(true);
       const fetchedData = await getData(currentDataset);
       if (fetchedData) {
         setData(formatDataForChart(fetchedData));
       }
+      setLoading(false);
     };
     fetchData();
   }, [currentDataset]);
@@ -57,51 +63,48 @@ const DataChart = () => {
     return formattedData;
   }
 
+  const handleDatasetChange = (e) => {
+    const newDataset = e.target.value;
+    console.log(`Switching from ${currentDataset} to ${newDataset}...`);
+    setLoading(true);
+    setCurrentDataset(newDataset);
+  };
+
+  const renderChart = (dataKey, stroke, name) => (
+    <div className="w-full max-w-6xl mt-8 bg-white p-6 rounded-md shadow-lg">
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="sys_time" tickFormatter={(unixTime) => new Date(unixTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
+          <YAxis />
+          <Tooltip labelFormatter={(value) => new Date(value).toLocaleString()} />
+          <Legend />
+          <Line type="monotone" dataKey={dataKey} stroke={stroke} dot={false} name={name} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full p-4">
-      <h1 className="text-4xl font-bold mb-4">Data Analysis</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen w-full p-4 bg-white bg-opacity-80 p-6 rounded-md shadow-lg mb-8">
+      {loading && <div className="text-lg text-blue-500 font-semibold mt-4">Loading data, please wait...</div>}
+      <div className="w-full max-w-6xl">
+        <h1 className="text-4xl font-bold text-center text-gray-800">Sensor Data Monitoring for SWD</h1>
+      </div>
+      <h2 className="text-2xl font-semibold text-center text-gray-600 mt-4">Currently Displaying: {currentDataset.toUpperCase()}</h2>
       <select
         className="mb-4 text-lg border-2 border-blue-500 rounded px-3 py-1"
+        disabled={loading}
         value={currentDataset}
-        onChange={(e) => setCurrentDataset(e.target.value)}
+        onChange={handleDatasetChange}
       >
-        <option value="ms1">MS1</option>
-        <option value="ms2">MS2</option>
-        <option value="south1">South1</option>
-        <option value="south2">South2</option>
-        <option value="lloyd">lloyd</option>
-        <option value="jeff">jeff</option>
+        {farms.map((farm) => (
+          <option key={farm} value={farm}>{farm.toUpperCase()}</option>
+        ))}
       </select>
-      <ResponsiveContainer width="95%" height={300}>
-        <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="sys_time" tickFormatter={(unixTime) => new Date(unixTime).toLocaleTimeString()} />
-          <YAxis />
-          <Tooltip labelFormatter={(value) => new Date(value).toLocaleString()} />
-          <Legend />
-          <Line type="monotone" dataKey="cpu_temp" stroke="#8884d8" dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="95%" height={300}>
-        <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="sys_time" tickFormatter={(unixTime) => new Date(unixTime).toLocaleTimeString()} />
-          <YAxis />
-          <Tooltip labelFormatter={(value) => new Date(value).toLocaleString()} />
-          <Legend />
-          <Line type="monotone" dataKey="env_humidity" stroke="#82ca9d" dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="95%" height={300}>
-        <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="sys_time" tickFormatter={(unixTime) => new Date(unixTime).toLocaleTimeString()} />
-          <YAxis />
-          <Tooltip labelFormatter={(value) => new Date(value).toLocaleString()} />
-          <Legend />
-          <Line type="monotone" dataKey="env_temperature" stroke="#ffc658" dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
+      {renderChart("env_temperature", "#ffc658", "Environmental Temperature")}
+      {renderChart("env_humidity", "#82ca9d", "Environmental Humidity")}
+      {renderChart("cpu_temp", "#8884d8", "CPU Temperature")}
     </div>
   );
 };
